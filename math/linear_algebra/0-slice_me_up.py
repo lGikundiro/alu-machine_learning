@@ -1,6 +1,3 @@
-import numpy as np
-import pycodestyle
-import scipy
 #!/usr/bin/env python3
 arr = [9, 8, 2, 3, 9, 4, 1, 0, 3]
 arr1 = arr[:2]
