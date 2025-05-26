@@ -1,10 +1,31 @@
 #!/usr/bin/env python3
+"""Function to add two 2D matrices element-wise"""
+
+
 def add_matrices2D(mat1, mat2):
-    # Check if both matrices have the same number of rows
+    """Adds two matrices element-wise
+
+    Args:
+        mat1: First 2D matrix (list of lists of ints/floats)
+        mat2: Second 2D matrix (list of lists of ints/floats)
+
+    Returns:
+        A new matrix containing the sum of the matrices element-wise,
+        or None if mat1 and mat2 are not the same shape
+    """
+    # Check if matrices have the same shape
     if len(mat1) != len(mat2):
         return None
-    # Check if all rows have the same length
-    if any(len(r1) != len(r2) for r1, r2 in zip(mat1, mat2)):
-        return None
-    # Return element-wise sum
-    return [[a + b for a, b in zip(r1, r2)] for r1, r2 in zip(mat1, mat2)]
+
+    result = []
+    for i in range(len(mat1)):
+        # Check if rows have the same length
+        if len(mat1[i]) != len(mat2[i]):
+            return None
+
+        row = []
+        for j in range(len(mat1[i])):
+            row.append(mat1[i][j] + mat2[i][j])
+        result.append(row)
+
+    return result

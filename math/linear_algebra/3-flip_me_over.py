@@ -1,18 +1,26 @@
-def matrix_transpose(matrix):
-    # Returns the transpose of a 2D matrix
-    return [[row[i] for row in matrix] for i in range(len(matrix[0]))]
+#!/usr/bin/env python3
+"""Function to transpose a 2D matrix"""
 
-if __name__ == "__main__":
-    mat1 = [[1, 2], [3, 4]]
-    print(mat1)
-    print(matrix_transpose(mat1))
-    mat2 = [
-        [1, 2, 3, 4, 5],
-        [6, 7, 8, 9, 10],
-        [11, 12, 13, 14, 15],
-        [16, 17, 18, 19, 20],
-        [21, 22, 23, 24, 25],
-        [26, 27, 28, 29, 30]
-    ]
-    print(mat2)
-    print(matrix_transpose(mat2))
+
+def matrix_transpose(matrix):
+    """Returns the transpose of a 2D matrix.
+
+    Args:
+        matrix: A 2D matrix to transpose
+
+    Returns:
+        A new matrix that is the transpose of the input matrix
+    """
+    # Get dimensions of the input matrix
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    # Create a new matrix with swapped dimensions
+    transpose = []
+    for j in range(cols):
+        new_row = []
+        for i in range(rows):
+            new_row.append(matrix[i][j])
+        transpose.append(new_row)
+
+    return transpose

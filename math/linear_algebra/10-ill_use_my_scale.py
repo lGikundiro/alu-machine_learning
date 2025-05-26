@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-import numpy as np
+"""Function to calculate the shape of a numpy.ndarray"""
+
 
 def np_shape(matrix):
-    """
-    Calculates the shape of a numpy.ndarray.
+    """Calculates the shape of a numpy.ndarray
 
     Args:
-        matrix (numpy.ndarray): The numpy array to calculate the shape of.
+        matrix: A numpy.ndarray
 
     Returns:
-        tuple: A tuple of integers representing the shape of the array.
+        A tuple of integers representing the shape of the array
     """
     return matrix.shape
