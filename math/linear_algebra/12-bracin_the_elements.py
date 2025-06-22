@@ -1,22 +1,8 @@
 #!/usr/bin/env python3
-"""Function to perform element-wise operations on numpy.ndarrays"""
+"""Demonstrate use of element-wise operations on numpy arrays"""
 
 
 def np_elementwise(mat1, mat2):
-    """Performs element-wise addition, subtraction, multiplication, and
-    division
-
-    Args:
-        mat1: First numpy.ndarray
-        mat2: Second numpy.ndarray or scalar
-
-    Returns:
-        A tuple containing the element-wise sum, difference, product, and
-        quotient
-    """
-    addition = mat1 + mat2
-    subtraction = mat1 - mat2
-    multiplication = mat1 * mat2
-    division = mat1 / mat2
-
-    return (addition, subtraction, multiplication, division)
+    """Peform element-wise addition, subtraction,
+    multiplication, and division on mat1 and mat2"""
+    return mat1+mat2, mat1-mat2, mat1*mat2, mat1/mat2

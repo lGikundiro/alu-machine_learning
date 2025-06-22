@@ -1,1 +1,1 @@
-Linear Algebra practice
+slicing in linear_algebra

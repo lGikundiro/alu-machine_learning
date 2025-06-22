@@ -1,13 +1,11 @@
-#!/usr/bin/env python3
-import numpy as np
+#!user/bin/evn python 3
 import matplotlib.pyplot as plt
+import numpy as np
 
-y = np.arange(0, 11) ** 3
-x = np.arange(0, 11)
+y=np.arange(0,11) **3
 
-plt.plot(x, y, 'r-')  # 'r-' means red solid line
-plt.xlabel('x')
-plt.ylabel('y')
-plt.title('y = x³')
-plt.grid(True)
+# plot y as a red solid line
+
+plt.plot(np.arange(0,11),y, c="red",linestyle="-", linewidth=2)
 plt.show()
+

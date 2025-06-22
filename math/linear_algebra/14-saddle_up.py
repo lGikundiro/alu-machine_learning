@@ -1,17 +1,8 @@
 #!/usr/bin/env python3
-"""Function to perform matrix multiplication"""
-
+"""Demonstrate the use of numpy matrix multiplication operator"""
 import numpy as np
 
 
 def np_matmul(mat1, mat2):
-    """Performs matrix multiplication
-
-    Args:
-        mat1: First numpy.ndarray
-        mat2: Second numpy.ndarray
-
-    Returns:
-        A new numpy.ndarray containing the matrix product of mat1 and mat2
-    """
+    """Perform matrix multiplication between mat1 and mat2 in that order"""
     return np.matmul(mat1, mat2)

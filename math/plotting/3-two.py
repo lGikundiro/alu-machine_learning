@@ -9,22 +9,23 @@ t2 = 1600
 y1 = np.exp((r / t1) * x)
 y2 = np.exp((r / t2) * x)
 
-# Plot the decay curves
-plt.plot(x, y1, 'r--', label='C-14')  # Dashed red line for C-14
-plt.plot(x, y2, 'g-', label='Ra-226')  # Solid green line for Ra-226
+# Plot x ↦ y1 with a dashed red line
+plt.plot(x, y1, color="red", linestyle="--", linewidth=2, label="C-14")
 
-# Set axis labels and title
-plt.xlabel('Time (years)')
-plt.ylabel('Fraction Remaining')
-plt.title('Exponential Decay of Radioactive Elements')
+# Plot x ↦ y2 with a solid green line
+plt.plot(x, y2, color="green", linestyle="-", linewidth=2, label="Ra-226")
 
-# Set axis limits
+# Set x-axis and y-axis limits
 plt.xlim(0, 20000)
 plt.ylim(0, 1)
 
-# Add legend in the upper right corner
-plt.legend(loc='upper right')
+# Add labels and title
+plt.xlabel("Time (years)")
+plt.ylabel("Fraction Remaining")
+plt.title("Exponential Decay of Radioactive Elements")
 
-# Display the plot
+# Add legend in the upper right-hand corner
+plt.legend(loc="upper right")
+
+# Show the plot
 plt.show()
-

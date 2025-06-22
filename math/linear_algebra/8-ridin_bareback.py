@@ -1,33 +1,17 @@
 #!/usr/bin/env python3
-"""Function to perform matrix multiplication"""
+"""Peform matrix muliplication on list-based matrices"""
 
 
 def mat_mul(mat1, mat2):
-    """Performs matrix multiplication
-
-    Args:
-        mat1: First 2D matrix (list of lists of ints/floats)
-        mat2: Second 2D matrix (list of lists of ints/floats)
-
-    Returns:
-        A new matrix resulting from the multiplication of mat1 by mat2,
-        or None if the matrices cannot be multiplied
-    """
-    # Check if matrices can be multiplied: columns of mat1 = rows of mat2
+    """Multiply mat1 and mat2 in that order"""
     if len(mat1[0]) != len(mat2):
         return None
-
-    # Get dimensions of the resulting matrix
-    rows = len(mat1)
-    cols = len(mat2[0])
-
-    # Initialize result matrix with zeros
-    result = [[0 for _ in range(cols)] for _ in range(rows)]
-
-    # Perform matrix multiplication
-    for i in range(rows):
-        for j in range(cols):
-            for k in range(len(mat2)):
-                result[i][j] += mat1[i][k] * mat2[k][j]
-
-    return result
+    new_mat = []
+    for arr1 in mat1:
+        new_row = []
+        for i in range(len(mat2[0])):
+            arr2 = [arr[i] for arr in mat2]
+            dot = sum([x*y for x, y in zip(arr1, arr2)])
+            new_row.append(dot)
+        new_mat.append(new_row)
+    return new_mat
