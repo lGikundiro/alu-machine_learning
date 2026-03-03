@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+"""
+Module that performs K-means using sklearn
+"""
+
+import sklearn.cluster
+
+
+def kmeans(X, k):
+    """
+    Performs K-means on a dataset
+
+    Parameters:
+    X: numpy.ndarray of shape (n, d) containing the dataset
+    k: number of clusters
+
+    Returns:
+    C: numpy.ndarray of shape (k, d) containing centroid means
+    clss: numpy.ndarray of shape (n,) containing cluster indices
+    """
+    kmeans_model = sklearn.cluster.KMeans(n_clusters=k)
+    kmeans_model.fit(X)
+    
+    C = kmeans_model.cluster_centers_
+    clss = kmeans_model.labels_
+    
+    return C, clss
