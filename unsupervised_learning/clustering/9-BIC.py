@@ -26,48 +26,56 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     b: numpy.ndarray of shape (kmax - kmin + 1) containing BIC value
     or None, None, None, None on failure
     """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None, None, None
-    if not isinstance(kmin, int) or kmin <= 0:
+    if type(kmin) is not int or kmin <= 0:
         return None, None, None, None
-    
+
     n, d = X.shape
-    
+
     if kmax is None:
         kmax = n
-    
-    if not isinstance(kmax, int) or kmax <= 0:
+
+    if type(kmax) is not int or kmax <= 0:
         return None, None, None, None
-    if kmin >= kmax:
+    if type(iterations) is not int or iterations <= 0:
         return None, None, None, None
-    
+    if not isinstance(tol, (int, float)) or tol < 0:
+        return None, None, None, None
+    if type(verbose) is not bool:
+        return None, None, None, None
+    if n == 0 or kmin > kmax:
+        return None, None, None, None
+    if kmax > n:
+        return None, None, None, None
+
     num_tests = kmax - kmin + 1
-    l = np.zeros(num_tests)
+    log_l_vals = np.zeros(num_tests)
     b = np.zeros(num_tests)
     results = []
-    
+
     for k in range(kmin, kmax + 1):
-        pi, m, S, g, log_l = expectation_maximization(
+        pi, m, S, g, current_log_l = expectation_maximization(
             X, k, iterations, tol, verbose
         )
-        
+
         if pi is None:
             return None, None, None, None
-        
+
         results.append((pi, m, S))
         idx = k - kmin
-        l[idx] = log_l
-        
+        log_l_vals[idx] = current_log_l
+
         # Calculate number of parameters
         # p = (k-1) + k*d + k*d*(d+1)/2
         p = (k - 1) + k * d + k * d * (d + 1) / 2
-        
+
         # Calculate BIC: p * ln(n) - 2 * l
-        b[idx] = p * np.log(n) - 2 * log_l
-    
+        b[idx] = p * np.log(n) - 2 * current_log_l
+
     # Find best k (minimum BIC)
     best_idx = np.argmin(b)
     best_k = best_idx + kmin
     best_result = results[best_idx]
-    
-    return best_k, best_result, l, b
+
+    return best_k, best_result, log_l_vals, b

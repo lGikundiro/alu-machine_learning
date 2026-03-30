@@ -21,13 +21,14 @@ def gmm(X, k):
     clss: numpy.ndarray of shape (n,) containing cluster indices
     bic: numpy.ndarray of shape (kmax - kmin + 1) containing BIC values
     """
-    gmm_model = sklearn.mixture.GaussianMixture(n_components=k)
+    gmm_model = sklearn.mixture.GaussianMixture(n_components=k,
+                                                random_state=0)
     gmm_model.fit(X)
-    
+
     pi = gmm_model.weights_
     m = gmm_model.means_
     S = gmm_model.covariances_
     clss = gmm_model.predict(X)
     bic = gmm_model.bic(X)
-    
+
     return pi, m, S, clss, bic

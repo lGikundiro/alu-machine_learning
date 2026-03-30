@@ -19,41 +19,43 @@ def pdf(X, m, S):
     P: numpy.ndarray of shape (n,) containing PDF values each data point
     or None on failure
     """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None
-    if not isinstance(m, np.ndarray) or len(m.shape) != 1:
+    if type(m) is not np.ndarray or m.ndim != 1:
         return None
-    if not isinstance(S, np.ndarray) or len(S.shape) != 2:
+    if type(S) is not np.ndarray or S.ndim != 2:
         return None
-    
+
     n, d = X.shape
-    
+
     if m.shape[0] != d:
         return None
     if S.shape[0] != d or S.shape[1] != d:
         return None
-    
+
     # Calculate determinant
     det = np.linalg.det(S)
-    if det == 0:
+    if det <= 0:
         return None
-    
-    # Calculate inverse of covariance matrix
-    S_inv = np.linalg.inv(S)
-    
+
+    try:
+        S_inv = np.linalg.inv(S)
+    except np.linalg.LinAlgError:
+        return None
+
     # Calculate normalization factor
     norm = 1 / np.sqrt(((2 * np.pi) ** d) * det)
-    
+
     # Calculate difference from mean
     diff = X - m
-    
+
     # Calculate Mahalanobis distance: (X-m) @ S^(-1) @ (X-m)^T
     mahalanobis = np.sum(diff @ S_inv * diff, axis=1)
-    
+
     # Calculate PDF
     P = norm * np.exp(-0.5 * mahalanobis)
-    
+
     # Ensure minimum value of 1e-300
     P = np.maximum(P, 1e-300)
-    
+
     return P

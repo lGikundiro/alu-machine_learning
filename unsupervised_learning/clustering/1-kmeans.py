@@ -22,50 +22,48 @@ def kmeans(X, k, iterations=1000):
     clss: numpy.ndarray of shape (n,) containing cluster index of each point
     or None, None on failure
     """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None
-    if not isinstance(k, int) or k <= 0:
+    if type(k) is not int or k <= 0:
         return None, None
-    if not isinstance(iterations, int) or iterations <= 0:
+    if type(iterations) is not int or iterations <= 0:
         return None, None
-    
+
     n, d = X.shape
-    
-    if k > n:
+
+    if n == 0 or k > n:
         return None, None
-    
+
     # Initialize centroids using multivariate uniform distribution
     min_vals = np.min(X, axis=0)
     max_vals = np.max(X, axis=0)
     C = np.random.uniform(low=min_vals, high=max_vals, size=(k, d))
-    
+
     # Main K-means loop
     for _ in range(iterations):
-        # Store previous centroids to check convergence
         C_prev = np.copy(C)
-        
+
         # Assign each point to nearest centroid
         distances = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
         clss = np.argmin(distances, axis=1)
-        
+
         # Update centroids
         for i in range(k):
-            # Get points assigned to cluster i
             cluster_points = X[clss == i]
-            
-            if len(cluster_points) == 0:
-                # Reinitialize empty cluster
-                C[i] = np.random.uniform(low=min_vals, high=max_vals, size=(d,))
+
+            if cluster_points.shape[0] == 0:
+                C[i] = np.random.uniform(low=min_vals,
+                                         high=max_vals,
+                                         size=(d,))
             else:
-                # Update centroid as mean of assigned points
                 C[i] = np.mean(cluster_points, axis=0)
-        
+
         # Check convergence
-        if np.allclose(C, C_prev):
-            break
-    
+        if np.array_equal(C, C_prev):
+            return C, clss
+
     # Final assignment
     distances = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
     clss = np.argmin(distances, axis=1)
-    
+
     return C, clss

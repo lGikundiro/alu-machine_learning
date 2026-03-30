@@ -28,50 +28,55 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     l: log likelihood of the model
     or None, None, None, None, None on failure
     """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None, None, None, None
-    if not isinstance(k, int) or k <= 0:
+    if type(k) is not int or k <= 0:
         return None, None, None, None, None
-    if not isinstance(iterations, int) or iterations <= 0:
+    if type(iterations) is not int or iterations <= 0:
         return None, None, None, None, None
     if not isinstance(tol, (int, float)) or tol < 0:
         return None, None, None, None, None
-    if not isinstance(verbose, bool):
+    if type(verbose) is not bool:
         return None, None, None, None, None
-    
+
+    n, d = X.shape
+    if n == 0 or k > n:
+        return None, None, None, None, None
+
     # Initialize parameters
     pi, m, S = initialize(X, k)
     if pi is None:
         return None, None, None, None, None
-    
-    prev_l = 0
-    
-    for i in range(iterations):
-        # E-step
-        g, l = expectation(X, pi, m, S)
-        if g is None:
-            return None, None, None, None, None
-        
-        # Print if verbose
-        if verbose and i % 10 == 0:
-            print(f"Log Likelihood after {i} iterations: {l:.5f}")
-        
-        # Check convergence
-        if i > 0 and abs(l - prev_l) <= tol:
-            if verbose:
-                print(f"Log Likelihood after {i} iterations: {l:.5f}")
-            break
-        
-        prev_l = l
-        
-        # M-step
+
+    g, log_l = expectation(X, pi, m, S)
+    if g is None:
+        return None, None, None, None, None
+
+    if verbose:
+        print("Log Likelihood after 0 iterations: {:.5f}".format(log_l))
+
+    for i in range(1, iterations + 1):
         pi, m, S = maximization(X, g)
         if pi is None:
             return None, None, None, None, None
-    else:
-        # Loop completed without break - run final E-step and print
-        g, l = expectation(X, pi, m, S)
-        if verbose:
-            print(f"Log Likelihood after {iterations} iterations: {l:.5f}")
-    
-    return pi, m, S, g, l
+
+        g, l_new = expectation(X, pi, m, S)
+        if g is None:
+            return None, None, None, None, None
+
+        printed = False
+        if verbose and (i % 10 == 0 or i == iterations):
+            print("Log Likelihood after {} iterations: {:.5f}"
+                  .format(i, l_new))
+            printed = True
+
+        if abs(l_new - log_l) <= tol:
+            log_l = l_new
+            if verbose and not printed:
+                print("Log Likelihood after {} iterations: {:.5f}"
+                      .format(i, log_l))
+            break
+
+        log_l = l_new
+
+    return pi, m, S, g, log_l

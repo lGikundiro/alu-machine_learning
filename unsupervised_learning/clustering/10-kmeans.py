@@ -18,10 +18,12 @@ def kmeans(X, k):
     C: numpy.ndarray of shape (k, d) containing centroid means
     clss: numpy.ndarray of shape (n,) containing cluster indices
     """
-    kmeans_model = sklearn.cluster.KMeans(n_clusters=k)
+    kmeans_model = sklearn.cluster.KMeans(n_clusters=k,
+                                          random_state=0,
+                                          n_init=10)
     kmeans_model.fit(X)
-    
+
     C = kmeans_model.cluster_centers_
     clss = kmeans_model.labels_
-    
+
     return C, clss

@@ -20,31 +20,38 @@ def maximization(X, g):
     S: numpy.ndarray of shape (k, d, d) containing updated covariance matrices
     or None, None, None on failure
     """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None, None
-    if not isinstance(g, np.ndarray) or len(g.shape) != 2:
+    if type(g) is not np.ndarray or g.ndim != 2:
         return None, None, None
-    
+
     n, d = X.shape
     k, n_g = g.shape
-    
-    if n != n_g:
+
+    if n == 0 or k == 0 or n != n_g:
         return None, None, None
-    
+    if np.any(g < 0):
+        return None, None, None
+    if not np.allclose(np.sum(g, axis=0), np.ones(n)):
+        return None, None, None
+
     # Calculate sum of posterior probabilities each cluster
     g_sum = np.sum(g, axis=1)  # shape (k,)
-    
+
+    if np.any(g_sum == 0):
+        return None, None, None
+
     # Update priors
     pi = g_sum / n
-    
+
     # Update means: m[k] = sum(g[k, i] * X[i]) / sum(g[k, i])
     m = (g @ X) / g_sum[:, np.newaxis]  # shape (k, d)
-    
+
     # Update covariance matrices
     S = np.zeros((k, d, d))
     for i in range(k):
         diff = X - m[i]  # shape (n, d)
         weighted_diff = g[i, :, np.newaxis] * diff  # shape (n, d)
         S[i] = (weighted_diff.T @ diff) / g_sum[i]
-    
+
     return pi, m, S
